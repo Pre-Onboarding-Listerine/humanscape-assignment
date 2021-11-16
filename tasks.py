@@ -9,6 +9,9 @@ from src.trials.application.services import TrialBatchService
 from src.trials.application.unit_of_work import SqlTrialUnitOfWork
 from src.trials.exceptions import UnauthorizedAuthenticationKeyException, OpenAPIServerErrorException
 from src.trials.infra.data_source import RestTrialDataSource
+from src.configs.database import Base, engine
+
+Base.metadata.create_all(bind=engine)
 
 redis_broker = RedisBroker(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
 dramatiq.set_broker(redis_broker)

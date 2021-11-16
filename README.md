@@ -57,7 +57,7 @@
 ### 이 중에서 과제에서 구현하도록 언급된 엔드포인트는 다음과 같습니다.
 
 - `GET /list`: 전체 임상 연구 리스트를 출력할 수 있습니다. 
-- `GET /trials/{int:trial_id}`: path parameter로 trial_id를 받아 특정 임상 연구 조회 할 수 있습니다.
+- `GET /trials/{trial_id}`: path parameter로 `trial_id`를 받아 특정 임상 연구 조회 할 수 있습니다.
 
 ### Unit test
 
@@ -75,12 +75,37 @@ $
 
 ### batch task
 
-- 임상 연구 오픈 API를 이용해 데이터를 저장하거나 업데이트 시켜 출력하는 기능을 구현하였습니다.
--
--
+임상 연구 오픈 API를 이용해 데이터를 가져와서 저장하거나 현재 가지고 있는 데이터를 업데이트하는 배치 태스크를 구현하였습니다.
+저희가 구현한 배치 태스크는 다음과 같은 특징을 갖습니다.
+
+- 배치 태스크의 동작을 확인하기 위해 매 분마다 데이터 동기화 태스크가 동작합니다.
+- 구현된 읽기 애플리케이션과는 서로 다른 컨테이너에서 서로 다른 프로세스로써 동작합니다.
+- 배치 태스크는 읽기 애플리케이션과 같은 데이터베이스의 테이블을 공유합니다.
+- 배치 태스크의 할당은 `run_cron.py`에서 수행되며 이를 수행하는 곳은 `tasks.py`입니다.
+- 배치 태스크의 jobstore와 broker의 역할은 모두 `Redis` 서비스가 담당합니다.
 
 ## 애플리케이션 구조
 
+애플리케이션은 기본적으로 계층화된 구조를 가지고 있습니다. 그 계층은 `presentation(routers.py)`, `application(application)`, `domain(domain)`, `persistence(infra)`로 이루어져 있습니다.
+각 계층은 다음과 같은 역할을 수행합니다.
+
+- `presentation`: 애플리케이션으로 들어온 요청을 처리할 수 있는 application 계층의 service로 전달합니다.
+- `application`: domain 모델을 사용하는 클라이언트 역할을 하며 persistence 계층으로의 접근을 제어하며, 트랜잭션을 관리합니다.
+- `domain`: 애플리케이션이 해결하는 문제 영역의 중심이 되는 컴포넌트들이 위치합니다.
+- `persistence`: 데이터를 실제로 보관하고 있는 곳으로의 접근을 제어합니다.
+
+### 주요 설계 포인트
+
+#### 추상클래스를 이용한 데이터 저장소로의 접근
+
+- 데이터로의 접근을 제어하기 위해서 `DataSource`와 `Repository` 컴포넌트를 구현했습니다.
+-  각각은 필요한 메소드가 추상화된 `AbstractTrialDataSource`와 `AbstractTrialRepository`를 구현해 오픈 API와 데이터베이스에 접근할 수 있도록 구현하였습니다.
+
+#### 작업단위(Unit of Work)를 이용한 트랜잭션 관리
+
+- 작업단위 컴포넌트의 `__enter__`와 `__exit__` 메소드를 오버라이드해서 이를 컨텍스트 매니저로써 사용할 수 있도록 구현하였습니다.
+- `__enter__` 메소드에서 세션과 `Repository`나 `DataSource` 객체를 생성해 작업단위의 컨텍스트 내에서만 데이터 저장소에 접근할 수 있도록 하였습니다.
+- `__exit__` 메소드에서 `rollback`을 호출하고 세션을 닫아서 커밋되지 않은 변경사항을 롤백시킵니다.
 
 ## 👨‍👨‍👧‍👦 실행환경 설절 방법
 
@@ -91,23 +116,30 @@ $
     ```bash
     $ git clone 
     ```
+   
+2. `<프로젝트 루트 디렉토리>/src/configs`, 해당 경로에 `secret.py`를 생성합니다.
 
-2. 애플리케이션 실행하기
+    ```python
+    # secret.py
+    DATA_SOURCE_END_POINT = "https://api.odcloud.kr/api/3074271/v1/uddi:cfc19dda-6f75-4c57-86a8-bb9c8b103887"
+    DATA_SOURCE_AUTHORIZATION = "<발급받은 Encoding 인증키>"
+    DATA_SOURCE_SERVICE_KEY = "<발급받은 Decoding 인증키>"
+    ```
+
+3. 애플리케이션 실행하기
 
     ```bash
     $ docker-compose up
 
     # 애플리케이션을 백그라운드에서 실행하고 싶다면
     $ docker-compose up -d
-    
-    # 어플리케이션이 실행이 되고 난 후에 데이터베이스 migration이 필요하다면
-    $ docker-compose exec api
     ```
 
-3. 애플리케이션에 접근하기
+4. 로컬에서 실행된 애플리케이션에 접근하기
 
-    ```
-   
+    ```commandline
+    # 호스트 URLs
+    http://localhost:8000
     ```
 
 ## 👨‍👨‍👧‍👦 과제 결과물 테스트 및 확인 방법

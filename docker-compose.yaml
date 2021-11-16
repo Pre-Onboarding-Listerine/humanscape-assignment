@@ -15,6 +15,8 @@ services:
     ports:
       - "8000:8000"
     entrypoint: ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    volumes:
+      - ./data:/app/data
 
   task:
     depends_on:
@@ -24,6 +26,8 @@ services:
       dockerfile: Dockerfile.batch
     entrypoint: ["dockerize", "-wait", "tcp://redis:6379", "-timeout", "30s"]
     command: dramatiq tasks
+    volumes:
+      - ./data:/app/data
 
   cron:
     depends_on:
@@ -33,3 +37,5 @@ services:
       dockerfile: Dockerfile.batch
     entrypoint: ["dockerize", "-wait", "tcp://redis:6379", "-timeout", "30s"]
     command: python run_cron.py
+    volumes:
+      - ./data:/app/data

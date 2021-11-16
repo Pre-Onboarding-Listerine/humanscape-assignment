@@ -343,3 +343,4 @@ cython_debug/
 *.env
 /sqlite.db
 /src/configs/secret.py
+/data/sqlite.db
