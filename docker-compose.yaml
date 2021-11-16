@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  redis:
+    image: redis:6.2.6
+    command: redis-server --requirepass redispassword --port 6379
+    hostname: redis
+    ports:
+      - "6379:6379"
