@@ -1,12 +1,14 @@
 import abc
 from typing import List
 
+from fastapi_pagination.ext.sqlalchemy import paginate
 from pydantic import parse_obj_as
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import StaleDataError
 
 from src.trials.domain import models
-from src.trials.exceptions import DoesNotExistTrialsException, DuplicatedTrialsException
+from src.trials.dto import TrialListParams
+from src.trials.exceptions import DoesNotExistTrialsException, DuplicatedTrialsException, TrialNotFoundException
 from src.trials.infra import orm
 
 
@@ -20,7 +22,7 @@ class AbstractTrialRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def list(self) -> List[models.Trial]:
+    def list(self, params: TrialListParams) -> List[models.Trial]:
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -44,10 +46,18 @@ class SqlTrialRepository(AbstractTrialRepository):
             raise DuplicatedTrialsException(e)
 
     def get(self, trial_id: str) -> models.Trial:
-        pass
+        trial = self.session.query(orm.Trial).filter(orm.Trial.trial_id == trial_id).first()
+        if not trial:
+            raise TrialNotFoundException(f"trial {trial_id} is not found")
+        return models.Trial.from_orm(trial)
 
-    def list(self) -> List[models.Trial]:
-        pass
+    def list(self, params: TrialListParams) -> List[models.Trial]:
+        query = self.session.query(orm.Trial).filter()
+        if params.start:
+            query = query.filter(orm.Trial.updated_at >= params.start)
+        if params.end:
+            query = query.filter(orm.Trial.updated_at < params.end)
+        return paginate(query)
 
     def list_by_ids(self, ids: List[str]) -> List[models.Trial]:
         return parse_obj_as(

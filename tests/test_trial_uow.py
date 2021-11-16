@@ -3,7 +3,8 @@ from datetime import datetime
 from assertpy import assert_that
 
 from src.trials.application.unit_of_work import SqlTrialUnitOfWork
-from src.trials.exceptions import DoesNotExistTrialsException, DuplicatedTrialsException
+from src.trials.dto import TrialListParams
+from src.trials.exceptions import DoesNotExistTrialsException, DuplicatedTrialsException, TrialNotFoundException
 
 
 def list_all_trial(session):
@@ -77,3 +78,23 @@ def test_bulk_update_with_exist_rows(session_factory, trials):
 
     assert_that(before[0].trial_id).is_equal_to(after[0].trial_id)
     assert_that(before[0].updated_at).is_not_equal_to(after[0].updated_at)
+
+
+def test_get_with_exist_trial(session_factory, trials):
+    session = session_factory()
+    insert_trials(session, trials)
+    session.commit()
+
+    trial = trials[0]
+    uow = SqlTrialUnitOfWork(session_factory)
+    with uow:
+        actual = uow.trials.get(trial_id=trial.trial_id)
+        assert_that(actual.trial_id).is_equal_to(trial.trial_id)
+        assert_that(actual.name).is_equal_to(trial.name)
+
+
+def test_get_with_not_exist_trial(session_factory):
+    trial_id = "123qwe"
+    uow = SqlTrialUnitOfWork(session_factory)
+    with uow:
+        assert_that(uow.trials.get).raises(TrialNotFoundException).when_called_with(trial_id=trial_id)

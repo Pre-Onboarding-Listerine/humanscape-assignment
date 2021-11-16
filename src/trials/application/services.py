@@ -1,5 +1,9 @@
+from typing import List
+
 from src.configs.data_source_configs import BATCH_SIZE
 from src.trials.application.unit_of_work import AbstractTrialUnitOfWork
+from src.trials.domain import models
+from src.trials.dto import TrialListParams
 from src.trials.infra.data_source import AbstractTrialDataSource
 
 
@@ -61,3 +65,16 @@ class TrialBatchService:
                 self.uow.trials.bulk_insert(create_required)
                 self.uow.trials.bulk_update(update_required)
                 self.uow.commit()
+
+
+class TrialReadService:
+    def __init__(self, uow: AbstractTrialUnitOfWork):
+        self.uow = uow
+
+    def get_trial(self, trial_id: str) -> models.Trial:
+        with self.uow:
+            return self.uow.trials.get(trial_id=trial_id)
+
+    def get_trials(self, params: TrialListParams) -> List[models.Trial]:
+        with self.uow:
+            return self.uow.trials.list(params)
