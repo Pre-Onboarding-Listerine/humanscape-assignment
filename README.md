@@ -69,7 +69,7 @@ $
 
 ## 👨‍👨‍👧‍👦 모델 관계
 
-![image](https://user-images.githubusercontent.com/32446834/141780326-f5aa1c00-d417-4452-aeef-a6c2f2ca6fdb.png)
+![image](https://user-images.githubusercontent.com/32446834/142003506-26349b83-d65a-4912-a5a9-b887d7aed36a.png)
 
 [모델링 관련 회의내용](https://github.com/Pre-Onboarding-Listerine/humanscape-assignment.wiki.git)
 
