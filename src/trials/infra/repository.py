@@ -2,8 +2,10 @@ import abc
 from typing import List
 
 from pydantic import parse_obj_as
+from sqlalchemy.orm.exc import StaleDataError
 
 from src.trials.domain import models
+from src.trials.exceptions import DoesNotExistTrialsException
 from src.trials.infra import orm
 
 
@@ -51,4 +53,7 @@ class SqlTrialRepository(AbstractTrialRepository):
 
     def bulk_update(self, modified: List[models.Trial]):
         trial_dicts = list(map(lambda trial: trial.dict(), modified))
-        self.session.bulk_update_mappings(orm.Trial, modified)
+        try:
+            self.session.bulk_update_mappings(orm.Trial, trial_dicts)
+        except StaleDataError as e:
+            raise DoesNotExistTrialsException(e)

@@ -1,11 +1,10 @@
-from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel
 
 
 class Trial(BaseModel):
-    # id: Optional[int] = None
+    id: Optional[int] = None
     trial_id: str
     name: str
     period: str
