@@ -5,7 +5,7 @@
 - 기업사이트: https://humanscape.io/kr/index.html
 - 기업채용공고: https://www.wanted.co.kr/wd/41413
 
-## 👨‍👨‍👧 과제 내용
+## 👨‍👨‍👧‍ 과제 내용
 
 ### **[필수 포함 사항]**
 
