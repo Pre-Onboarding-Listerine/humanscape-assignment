@@ -1,4 +1,4 @@
-# humanscape-assignment
+# 👨‍👨‍👧‍👦 humanscape-assignment
 
 ## 👨‍👨‍👧‍👦 기업과제
 - 휴먼스케이프
@@ -16,19 +16,19 @@
     - 해당 과제를 진행하면서 회고 내용 블로그 포스팅
 - Swagger나 Postman을 이용하여 API 테스트 가능하도록 구현
 
-### 확인 사항
+### [확인 사항]
 
 - **ORM 사용 필수**
 - **데이터베이스는 SQLite로 구현**
 - **secret key, api key 등을 레포지토리에 올리지 않도록 유의**
     - README.md 에 관련 설명 명시 필요
 
-### 도전 과제: 스스로에게도 도움이 되는 내용 + 추가 가산점
+### [도전 과제: 스스로에게도 도움이 되는 내용 + 추가 가산점]
 
 - 배포하여 웹에서 사용 할 수 있도록 제공
 - 임상정보 검색 API 제공
 
-### 과제 안내
+### [과제 안내]
 
 다음 사항들을 충족하는 서비스를 구현해주세요.
 
@@ -52,7 +52,7 @@
 | `윤수진` |  | [study-by-myself](https://github.com/study-by-myself)| https://pro-yomi.tistory.com |
 | `주종민` |  | [Gouache-studio](https://github.com/Gouache-studio) | https://gouache-studio.tistory.com/ |
 
-## 구현 내용
+## 👨‍👨‍👧‍👦 구현 내용
 
 ### 이 중에서 과제에서 구현하도록 언급된 엔드포인트는 다음과 같습니다.
 
@@ -72,7 +72,7 @@ $ pytest
 
 ![image](https://user-images.githubusercontent.com/32446834/142003506-26349b83-d65a-4912-a5a9-b887d7aed36a.png)
 
-### batch task
+### 👨‍👨‍👧‍👦 batch task
 
 임상 연구 오픈 API를 이용해 데이터를 가져와서 저장하거나 현재 가지고 있는 데이터를 업데이트하는 배치 태스크를 구현하였습니다.
 저희가 구현한 배치 태스크는 다음과 같은 특징을 갖습니다.
@@ -83,7 +83,7 @@ $ pytest
 - 배치 태스크의 할당은 `run_cron.py`에서 수행되며 이를 수행하는 곳은 `tasks.py`입니다.
 - 배치 태스크의 jobstore와 broker의 역할은 모두 `Redis` 서비스가 담당합니다.
 
-## 애플리케이션 구조
+## 👨‍👨‍👧‍👦 애플리케이션 구조
 
 애플리케이션은 기본적으로 계층화된 구조를 가지고 있습니다. 그 계층은 `presentation(routers.py)`, `application(application)`, `domain(domain)`, `persistence(infra)`로 이루어져 있습니다.
 각 계층은 다음과 같은 역할을 수행합니다.
@@ -93,7 +93,7 @@ $ pytest
 - `domain`: 애플리케이션이 해결하는 문제 영역의 중심이 되는 컴포넌트들이 위치합니다.
 - `persistence`: 데이터를 실제로 보관하고 있는 곳으로의 접근을 제어합니다.
 
-### 주요 설계 포인트
+### 👨‍👨‍👧‍👦 주요 설계 포인트
 
 #### 추상클래스를 이용한 데이터 저장소로의 접근
 
@@ -143,7 +143,10 @@ $ pytest
 
 ## 👨‍👨‍👧‍👦 과제 결과물 테스트 및 확인 방법
 
-1. POSTMAN 확인: 
+1. POSTMAN 확인
+    ```commandline
+    https://documenter.getpostman.com/view/15905881/UVCB9PDd
+    ```
 
 2. 배포된 서버의 주소
 
