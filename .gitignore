@@ -342,3 +342,4 @@ cython_debug/
 .idea
 *.env
 /sqlite.db
+/src/configs/secret.py
