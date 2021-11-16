@@ -45,12 +45,12 @@
 
 * 팀원
 
-| 이름 | 역할 | GITHUB | BLOG |
-| :---: | :---: | :---: | :---: |
-| `김주완` |  | [joowankim](https://github.com/joowankim) | https://make-easy-anything.tistory.com |
-| `박은혜` |  | [eunhye43](https://github.com/eunhye43) | https://velog.io/@majaeh43 |
-| `윤수진` |  | [study-by-myself](https://github.com/study-by-myself)| https://pro-yomi.tistory.com |
-| `주종민` |  | [Gouache-studio](https://github.com/Gouache-studio) | https://gouache-studio.tistory.com/ |
+| 이름 | GITHUB | BLOG |
+| :---: | :---: | :---: |
+| `김주완` | [joowankim](https://github.com/joowankim) | https://make-easy-anything.tistory.com |
+| `박은혜` | [eunhye43](https://github.com/eunhye43) | https://velog.io/@majaeh43 |
+| `윤수진` | [study-by-myself](https://github.com/study-by-myself)| https://pro-yomi.tistory.com |
+| `주종민` | [Gouache-studio](https://github.com/Gouache-studio) | https://gouache-studio.tistory.com/ |
 
 ## 👨‍👨‍👧‍👦 구현 내용
 
