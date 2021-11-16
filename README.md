@@ -72,8 +72,6 @@ $ pytest
 
 ![image](https://user-images.githubusercontent.com/32446834/142003506-26349b83-d65a-4912-a5a9-b887d7aed36a.png)
 
-[모델링 관련 회의내용](https://github.com/Pre-Onboarding-Listerine/humanscape-assignment.wiki.git)
-
 ### batch task
 
 임상 연구 오픈 API를 이용해 데이터를 가져와서 저장하거나 현재 가지고 있는 데이터를 업데이트하는 배치 태스크를 구현하였습니다.
@@ -115,7 +113,7 @@ $ pytest
 1. 레포지토리 git 클론
 
     ```bash
-    $ git clone 
+    $ git clone https://github.com/Pre-Onboarding-Listerine/humanscape-assignment.git
     ```
    
 2. `<프로젝트 루트 디렉토리>/src/configs`, 해당 경로에 `secret.py`를 생성합니다.
