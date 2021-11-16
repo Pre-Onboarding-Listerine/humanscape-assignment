@@ -7,3 +7,29 @@ services:
     hostname: redis
     ports:
       - "6379:6379"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.application
+    ports:
+      - "8000:8000"
+    entrypoint: ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  task:
+    depends_on:
+      - redis
+    build:
+      context: .
+      dockerfile: Dockerfile.batch
+    entrypoint: ["dockerize", "-wait", "tcp://redis:6379", "-timeout", "30s"]
+    command: dramatiq tasks
+
+  cron:
+    depends_on:
+      - redis
+    build:
+      context: .
+      dockerfile: Dockerfile.batch
+    entrypoint: ["dockerize", "-wait", "tcp://redis:6379", "-timeout", "30s"]
+    command: python run_cron.py

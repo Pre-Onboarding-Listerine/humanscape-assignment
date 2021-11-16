@@ -19,11 +19,9 @@ dramatiq.set_broker(redis_broker)
 def synchronize_data():
     data_source = RestTrialDataSource(url=END_POINT, authorization=AUTHORIZATION, service_key=SERVICE_KEY)
     uow = SqlTrialUnitOfWork(SessionLocal)
-    print("start synchronize")
     try:
         TrialBatchService(data_source, uow).synchronize()
     except UnauthorizedAuthenticationKeyException as e:
         print(e)
     except OpenAPIServerErrorException as e:
         print(e)
-    print("end synchronize")
