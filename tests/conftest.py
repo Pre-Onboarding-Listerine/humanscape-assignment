@@ -7,7 +7,7 @@ from src.configs.database import Base
 from src.trials.infra.orm import Trial
 
 pytest_plugins = [
-    "tests.integration.fixtures.data",
+    "tests.fixtures.data",
 ]
 
 TEST_SQLITE_URL = "sqlite:///:memory:"

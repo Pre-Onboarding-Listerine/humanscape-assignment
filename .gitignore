@@ -341,3 +341,4 @@ cython_debug/
 
 .idea
 *.env
+/sqlite.db

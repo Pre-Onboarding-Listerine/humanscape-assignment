@@ -2,10 +2,11 @@ import abc
 from typing import List
 
 from pydantic import parse_obj_as
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import StaleDataError
 
 from src.trials.domain import models
-from src.trials.exceptions import DoesNotExistTrialsException
+from src.trials.exceptions import DoesNotExistTrialsException, DuplicatedTrialsException
 from src.trials.infra import orm
 
 
@@ -37,7 +38,10 @@ class SqlTrialRepository(AbstractTrialRepository):
 
     def bulk_insert(self, trials: List[models.Trial]):
         trial_dicts = list(map(lambda trial: trial.dict(), trials))
-        self.session.bulk_insert_mappings(orm.Trial, trial_dicts)
+        try:
+            self.session.bulk_insert_mappings(orm.Trial, trial_dicts)
+        except IntegrityError as e:
+            raise DuplicatedTrialsException(e)
 
     def get(self, trial_id: str) -> models.Trial:
         pass
